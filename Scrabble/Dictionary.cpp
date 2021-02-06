@@ -1,27 +1,32 @@
 /*		 Created By Samuel Buzz Appleby
- *               03/02/2021
+ *               06/02/2021
  *			Dictionary Implementation			 */
 #include "Dictionary.h"
-#include <set>
+
 Dictionary::Dictionary(ifstream& file) {
 	numWords = 0;
-	validWords = nullptr;
-
 	string line;
 	int pos = 0;
+	set<string> orderedWords;
 	while (getline(file, line)) {
-		if (pos == 0) {
-			numWords = (atoi(line.c_str()));
-			validWords = new string[numWords];
-			++pos;
+		/* We fail if any word in the dictionary is not made of characters */
+		if (!regex_match(line, std::regex("^[A-Za-z]+$"))) {
+			cout << "A dictionary word is not valid!";
+			exit(EXIT_FAILURE);
 		}
-		else {
-			transform(line.begin(), line.end(), line.begin(), [](unsigned char c) { return toupper(c); });
-			validWords[pos - 1] = line;
-			++pos;
-		}
+		transform(line.begin(), line.end(), line.begin(), [](unsigned char c) { return toupper(c); });
+		orderedWords.insert(line);
+		++pos;
 	}
-	//sort(validWords, validWords + numWords);		// If we need to sort the dictionary
+	/* Convert to array, contiguous memory */
+	numWords = orderedWords.size();
+	validWords = new string[numWords];
+	pos = 0;
+	for (auto& w : orderedWords) {
+		if (pos < numWords)
+			validWords[pos] = w;
+		pos++;
+	}
 }
 
 Dictionary::~Dictionary() {

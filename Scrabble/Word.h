@@ -1,5 +1,5 @@
 /*		 Created By Samuel Buzz Appleby
- *               03/02/2021
+ *               06/02/2021
  *			   Lock Definition			 */
 #pragma once
 #include "Dictionary.h" 
@@ -9,7 +9,7 @@ class Word {
 public:
 	Word(string name, Dictionary& d);
 
-	set<string> GenerateAndTestCombinations();
+	set<string> GenerateAndTestCombinations(bool all);
 	void TestCombination(string name);
 	int BinarySearch(string arr[], string x, int n);
 
@@ -18,6 +18,6 @@ private:
 	string word;
 	set<string> foundWords;
 	Dictionary* dictionary;
-	int bestLeft;
+	bool maxOnly;
 };
 
